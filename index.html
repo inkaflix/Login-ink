@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pantalla de Inicio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    .background {
+      background: url('https://raw.githubusercontent.com/inkaflix/API/main/logo-inka-sann.png') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 20px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e50914;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    .description {
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .description-secondary {
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 25px;
+      color: #cccccc;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 320px;
+      padding: 15px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease, color 0.3s ease;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-free {
+      background-color: #e50914;
+      color: #fff;
+    }
+
+    .btn-access {
+      background-color: transparent;
+      border: 2px solid #e50914;
+      color: #e50914;
+    }
+
+    .btn-create {
+      background: none;
+      border: none;
+      color: #e50914;
+      text-decoration: underline;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .btn-create:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 320px;
+      margin-top: 10px;
+      font-size: 13px;
+      align-items: center;
+    }
+
+    .terms {
+      color: #ccc;
+    }
+
+    .checkbox {
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Estilo para mensaje flotante */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #e50914;
+      color: white;
+      text-align: center;
+      border-radius: 4px;
+      padding: 12px 20px;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="overlay">
+      <div class="logo">
+        <img src="https://raw.githubusercontent.com/inkaflix/API/main/logo.png" alt="Mini Logo" />
+        <span>Inkaflix</span>
+      </div>
+      <div class="description">Todo tu anime, películas y series. Todo en un solo lugar.</div>
+      <div class="description description-secondary">InkaFlix Llegó A Latam</div>
+
+      <a id="btnExplorar" href="https://inkapflix.blogspot.com" class="btn btn-free" disabled>EXPLORAR SIN CUENTA</a>
+      <a id="btnAcceder" href="https://login-inka.netlify.app/" class="btn btn-access" disabled>ACCEDER</a>
+
+      <div class="bottom-row">
+        <div class="terms">
+          <label>
+            <input id="acceptTerms" type="checkbox" class="checkbox" />
+            Acepto <a href="https://terminos-inka.netlify.app/" target="_blank" style="color:#e50914; text-decoration: underline;">Términos</a>
+          </label>
+        </div>
+        <a id="btnCrear" href="https://login-inka.netlify.app/" class="btn-create" disabled>Crear Cuenta</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje flotante -->
+  <div id="toast">Debes aceptar los términos para continuar.</div>
+
+  <script>
+    // Redirigir automáticamente si ya aceptó antes
+    window.addEventListener('load', () => {
+      const accepted = localStorage.getItem('userAccepted');
+      if (accepted === 'true') {
+        // Cambia la URL si quieres que vaya a otro lugar
+        window.location.href = "https://inkaflixlat.blogspot.com";
+      }
+    });
+
+    const checkbox = document.getElementById("acceptTerms");
+    const btnExplorar = document.getElementById("btnExplorar");
+    const btnAcceder = document.getElementById("btnAcceder");
+    const btnCrear = document.getElementById("btnCrear");
+    const toast = document.getElementById("toast");
+
+    function showToast() {
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // Función para habilitar o deshabilitar botones
+    function updateButtons(accepted) {
+      if (accepted) {
+        btnExplorar.removeAttribute("disabled");
+        btnAcceder.removeAttribute("disabled");
+        btnCrear.removeAttribute("disabled");
+
+        btnExplorar.href = "https://inkaflixlat.blogspot.com";
+        btnCrear.href = "https://login-inka.netlify.app/";
+        btnAcceder.href = "#"; // mantenemos para acción JS
+      } else {
+        btnExplorar.setAttribute("disabled", true);
+        btnAcceder.setAttribute("disabled", true);
+        btnCrear.setAttribute("disabled", true);
+
+        btnExplorar.href = "#";
+        btnAcceder.href = "#";
+        btnCrear.href = "#";
+      }
+    }
+
+    // Inicializamos: checkbox sin marcar y botones deshabilitados
+    checkbox.checked = false;
+    updateButtons(false);
+
+    // Listener para checkbox que activa/desactiva botones
+    checkbox.addEventListener("change", function () {
+      updateButtons(this.checked);
+    });
+
+    // Listener para botón EXPLORAR
+    btnExplorar.addEventListener("click", function (e) {
+      if (btnExplorar.hasAttribute("disabled")) {
+        e.preventDefault();
+        showToast();
+      }
+    });
+
+    // Listener para botón ACCEDER que redirige solo si checkbox marcado
+    btnAcceder.addEventListener("click", function (e) {
+      if (!checkbox.checked) {
+        e.preventDefault();
+        showToast();
+        return;
+      }
+      e.preventDefault();
+      localStorage.setItem("userAccepted", "true");
+      window.location.href = "https://inkapflix.blogspot.com";
+    });
+
+    // Listener para botón CREAR CUENTA
+    btnCrear.addEventListener("click", function (e) {
+      if (btnCrear.hasAttribute("disabled")) {
+        e.preventDefault();
+        showToast();
+      }
+    });
+  </script>
+</body>
+</html>
