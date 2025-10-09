@@ -178,7 +178,7 @@
       <div class="description">Todo tu anime, películas y series. Todo en un solo lugar.</div>
       <div class="description description-secondary">InkaFlix Llegó A Latam</div>
 
-      <a id="btnExplorar" href="https://inkapflix.blogspot.com" class="btn btn-free" disabled>EXPLORAR SIN CUENTA</a>
+      <a id="btnExplorar" href="https://inkaflixlat.blogspot.com" class="btn btn-free" disabled>EXPLORAR SIN CUENTA</a>
       <a id="btnAcceder" href="https://login-inka.netlify.app/" class="btn btn-access" disabled>ACCEDER</a>
 
       <div class="bottom-row">
@@ -202,7 +202,7 @@
       const accepted = localStorage.getItem('userAccepted');
       if (accepted === 'true') {
         // Cambia la URL si quieres que vaya a otro lugar
-        window.location.href = "https://inkapflix.blogspot.com";
+        window.location.href = "https://inkaflixlat.blogspot.com";
       }
     });
 
@@ -226,7 +226,7 @@
         btnAcceder.removeAttribute("disabled");
         btnCrear.removeAttribute("disabled");
 
-        btnExplorar.href = "https://inkapflix.blogspot.com";
+        btnExplorar.href = "https://inkaflixlat.blogspot.com";
         btnCrear.href = "https://login-inka.netlify.app/";
         btnAcceder.href = "#"; // mantenemos para acción JS
       } else {
@@ -266,7 +266,7 @@
       }
       e.preventDefault();
       localStorage.setItem("userAccepted", "true");
-      window.location.href = "https://inkapflix.blogspot.com";
+      window.location.href = "https://inkaflixlat.blogspot.com";
     });
 
     // Listener para botón CREAR CUENTA
